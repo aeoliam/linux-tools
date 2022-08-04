@@ -66,6 +66,7 @@ SPCCONF="$HOME/.config/spicetify" || SPCCONF='~/.config/spicetify'
 SPCURL="https://github.com/spicetify/spicetify-cli/releases/download/$version/spicetify-${version#v}-$target.tar.gz"
 DOWNDIR="$HOME/Downloads"
 SPCFILE="$DOWNDIR/${URL##*/}"
+SPCPATH=$(echo $PATH | grep -o "${SPCDIR##*/}")
 
 # remove previously installed spicetify (if installed)
 [ -d "$SPCDIR" ] && sudo rm -rf $SPCDIR
@@ -87,7 +88,6 @@ sudo tar -zxf $SPCFILE -C $SPCDIR && rm -f $SPCFILE
 sudo chmod a+rwx -R $SPCDIR
 
 # add spicetify directory to $PATH (if not listed)
-SPCPATH=$(echo $PATH | grep -o "${SPCDIR##*/}")
 [ -z "$SPCPATH" ] && { 
 	if [ -f ~/.bash_profile ] || [ -f ~/.bash_login ]; then
 		echo 'export PATH="$PATH:$SPCDIR"' >> ~/.bashrc
