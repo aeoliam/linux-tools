@@ -2,7 +2,7 @@
 
 Bash script tools for Linux, specifically for Debian/Ubuntu-based Linux distributions.
 
-Make it easier than executing commands one-by-one.
+Make it easier just by running one script than executing commands one-by-one.
 
 ## Description & Usage
 
