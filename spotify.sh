@@ -73,7 +73,7 @@ SPCPATH=$(echo $PATH | grep -o "${SPCDIR##*/}")
 [ -d "$SPCCONF" ] && sudo rm -rf $SPCCONF
 
 # fetch & download spicetify
-wget --directory-prefix="$DOWNDIR" $URL
+wget --directory-prefix="$DOWNDIR" $SPCURL
 
 # sleep to make sure commands are executed properly
 sleep 3
