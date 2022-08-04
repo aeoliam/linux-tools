@@ -43,7 +43,7 @@ unistall_xfce4() {
 	# media player
 	sudo apt -y install 'vlc'
 	# text editor
-	sudo apt -y install --reinstall 'mousepad'
+	sudo apt -y install 'mousepad'
 	# Chinese, Japanese and Korean fonts support
 	sudo apt -y install 'fonts-noto-cjk'
 	# emoji fonts support
