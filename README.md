@@ -1,37 +1,61 @@
-# LINUX TOOLS
+# Linux Tools
 
 Bash script tools for Linux, specifically for Debian/Ubuntu-based Linux distributions.
 
 Make it easier than executing commands one-by-one.
-<br>You can use this script as an example, maybe you want to make your own bash script in the future.
 
-## Script Description
+## Description & Usage
 
 - [cleanup.sh](/cleanup.sh)
-<br>Perform **apt** `update`, `upgrade`, `full-upgrade`, `dist-upgrade`, `clean`, `auto-clean` and `auto-remove` commands.
+<br>Perform **apt** `update`, `upgrade`, `full-upgrade`, `dist-upgrade`, `clean`, `auto-clean` and `auto-remove` commands.<br>
+<br>Usage:
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/cleanup.sh | sh
+  ```
 
 - [installer.sh](/installer.sh)
 <br>Install Linux applications. (Selectable)<br>
-<br>List of applications on this command are basic and my most frequently used applications.
+<br>List of applications on this command are basic and my most frequently used applications.<br>
+(Spotify and Spicetify are also included in this script.)<br>
+<br>Usage:
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/installer.sh | sh
+  ```
 
 - [uninstaller.sh](/uninstaller.sh)
 <br>Uninstall Linux applications. (Selectable)<br>
-<br>List of applications on this command are mostly prebuilt and rarely used applications.
+<br>List of applications on this command are mostly prebuilt and rarely used applications.<br>
+<br>Usage:
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/uninstaller.sh | sh
+  ```
 
 - [spotify.sh](/spotify.sh)
 <br>Install Spotify and Spicetify just by executing this script. Make it ready-to-play, so you don't have to execute any commands manually. Just open Spotify and listen to a song peacefully after executed this script.<br>
-<br>Spicetify v2.9.9 will be used since Spotify for Debian/Ubuntu stuck at v1.1.84.
-
-- [deb.sh](/deb_install.sh)
-<br>This script will install all the `.deb` files located in `/Downloads` folder.
-<br><br>You can also specify the `.deb` file by executing the following command:
+<br>Spicetify v2.9.9 will be used since Spotify for Debian/Ubuntu stuck at v1.1.84.<br>
+<br>Usage:
   ```bash
-  ./deb.sh install 'filename'
-  
-  # File must be located at /Downloads folder.
-
-  # You can install it without specify the file name.
-  # e.g. file name is 'code_1.69.2-1658162013_amd64.deb'
-  # you can execute:
-  ./deb.sh install 'code'
+  curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/spotify.sh | sh
   ```
+
+- [deb_install.sh](/deb_install.sh)
+<br>This script will install all the `.deb` files located in `/Downloads` folder.<br>
+<br>Usage:
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/deb_install.sh | sh
+  ```
+
+#### Advanced Usage
+( _can be used anytime without internet connection_ )
+
+```bash
+wget <url>
+chmod +x <script-name>.sh
+./<script-name>.sh
+```
+**Example**
+```bash
+wget https://raw.githubusercontent.com/aeoliam/linux-tools/master/cleanup.sh
+chmod +x cleanup.sh
+./cleanup.sh
+```
