@@ -25,7 +25,7 @@ if [ -z "$(command -v spotify)" ]; then
 	# add spotify repository to apt sources
 	sudo echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.dspotify.list
 	# finally install spotify-client
-	sudo apt -y update && sudo apt -y install spotify-client
+	sudo apt -y update && sudo apt -y install 'spotify-client'
 	# sleep to make sure commands are executed properly
 	sleep 3
 fi
@@ -38,7 +38,7 @@ if [ ! -f "/usr/share/applications/spotify.desktop" ]; then
 fi
 
 # set spotify permissions
-sudo chmod a+rw -R $SPDIR
+sudo chmod a+rw -R "$SPDIR"
 
 # sleep to make sure commands are executed properly
 sleep 3
@@ -54,10 +54,10 @@ SPCCONF="$HOME/.config/spicetify" || SPCCONF='~/.config/spicetify'
 
 # check platform
 case $(uname -sm) in
-	"Darwin x86_64") target="darwin-amd64" ;;
-	"Darwin arm64") target="darwin-arm64" ;;
-	"Linux x86_64") target="linux-amd64" ;;
-	"Linux aarch64") target="linux-arm64" ;;
+	"Darwin x86_64") target='darwin-amd64' ;;
+	"Darwin arm64") target='darwin-arm64' ;;
+	"Linux x86_64") target='linux-amd64' ;;
+	"Linux aarch64") target='linux-arm64' ;;
 	*) echo "Unsupported platform $(uname -sm). Only avaible for x86_64 and arm64 binaries for Linux and Darwin."; exit 1 ;;
 esac
 
