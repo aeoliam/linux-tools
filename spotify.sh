@@ -4,9 +4,6 @@
 # SETUP
 ##################################################
 
-# exit immediately if a simple command exits with a non-zero status
-set -e
-
 # check dependencies
 command -v curl >/dev/null || { echo "[curl] isn't installed!"; sudo apt -y update && sudo apt -y install curl; }
 command -v wget >/dev/null || { echo "[grep] isn't installed!"; sudo apt -y update && sudo apt -y install wget; }
@@ -48,10 +45,6 @@ sleep 3
 
 SPCDIR="$HOME/.spicetify" || SPCDIR='~/.spicetify'
 SPCCONF="$HOME/.config/spicetify" || SPCCONF='~/.config/spicetify'
-SPCURL="https://github.com/spicetify/spicetify-cli/releases/download/$version/spicetify-${version#v}-$target.tar.gz"
-DOWNDIR="$HOME/Downloads" || DOWNDIR='~/Downloads'
-SPCFILE="$DOWNDIR/${SPCURL##*/}"
-SPCPATH=$(echo $PATH | grep -o "${SPCDIR##*/}")
 
 # check platform
 case $(uname -sm) in
@@ -64,6 +57,11 @@ esac
 
 # version
 version='v2.9.9'
+
+DOWNDIR="$HOME/Downloads" || DOWNDIR='~/Downloads'
+SPCURL="https://github.com/spicetify/spicetify-cli/releases/download/$version/spicetify-${version#v}-$target.tar.gz"
+SPCFILE="$DOWNDIR/${SPCURL##*/}"
+SPCPATH=$(echo "$PATH" | grep -o "${SPCDIR##*/}")
 
 # remove previously installed spicetify (if installed)
 [ -z "$(command -v spicetify)" ] || spicetify restore
@@ -87,7 +85,7 @@ sudo chmod a+rwx -R $SPCDIR
 
 # add spicetify directory to $PATH (if not listed)
 [ -z "$SPCPATH" ] && { 
-	if [ -f ~/.bash_profile ] || [ -f ~/.bash_login ]; then
+	if [ -f "~/.bash_profile" ] || [ -f "~/.bash_login" ]; then
 		echo 'export PATH="$PATH:$SPCDIR"' >> ~/.bashrc
 		source ~/.bashrc
 	else
