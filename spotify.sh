@@ -4,17 +4,8 @@
 # SETUP
 ##################################################
 
-# check platform
-case $(uname -sm) in
-	"Darwin x86_64") target="darwin-amd64" ;;
-	"Darwin arm64") target="darwin-arm64" ;;
-	"Linux x86_64") target="linux-amd64" ;;
-	"Linux aarch64") target="linux-arm64" ;;
-	*) echo "Unsupported platform $(uname -sm). Only avaible for x86_64 and arm64 binaries for Linux and Darwin."; exit 1 ;;
-esac
-
-# version
-version='v2.9.9'
+# exit immediately if a simple command exits with a non-zero status
+set -e
 
 # check dependencies
 command -v curl >/dev/null || { echo "[curl] isn't installed!"; sudo apt -y update && sudo apt -y install curl; }
@@ -22,31 +13,25 @@ command -v wget >/dev/null || { echo "[grep] isn't installed!"; sudo apt -y upda
 command -v tar >/dev/null || { echo "[tar] isn't installed!"; sudo apt -y update && sudo apt -y install tar; }
 command -v unzip >/dev/null || { echo "[unzip] isn't installed!"; sudo apt -y update && sudo apt -y install unzip; }
 
-
-# sleep to make sure commands are executed properly
-sleep 3
-
 ##################################################
 # INSTALL SPOTIFY
 ##################################################
 
-SPDIR="/usr/share/spotify"
+SPDIR='/usr/share/spotify'
 SPCONF="$HOME/.config/spotify" || SPCONF='~/.config/spotify'
 SPPREFS="$SPCONF/prefs"
 
-# remove previously installed spotify (if installed)
-sudo apt -y update && sudo apt-get -y purge --auto-remove spotify-client
-[ -d "$SPCONF" ] && rm -rf $SPCONF
-
-# add spotify pubkey to apt
-curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - 
-# add spotify repository to apt sources
-sudo echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.dspotify.list
-# finally install spotify-client
-sudo apt -y update && sudo apt -y install spotify-client
-
-# sleep to make sure commands are executed properly
-sleep 3
+# check wether spotify is installed or not
+if [ -z "$(command -v spotify)" ]; then
+	# add spotify pubkey to apt
+	curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - 
+	# add spotify repository to apt sources
+	sudo echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.dspotify.list
+	# finally install spotify-client
+	sudo apt -y update && sudo apt -y install spotify-client
+	# sleep to make sure commands are executed properly
+	sleep 3
+fi
 
 # create spotify (linked) shortcut (if not exist)
 { [ -f "/usr/share/applications/spotify.desktop" ] || sudo ln -s /usr/share/spotify/spotify.desktop /usrshare/applications/; } && { [ -z "$(command -v xfce4-panel)" ] || xfce4-panel -r; }
@@ -64,11 +49,24 @@ sleep 3
 SPCDIR="$HOME/.spicetify" || SPCDIR='~/.spicetify'
 SPCCONF="$HOME/.config/spicetify" || SPCCONF='~/.config/spicetify'
 SPCURL="https://github.com/spicetify/spicetify-cli/releases/download/$version/spicetify-${version#v}-$target.tar.gz"
-DOWNDIR="$HOME/Downloads"
-SPCFILE="$DOWNDIR/${URL##*/}"
+DOWNDIR="$HOME/Downloads" || DOWNDIR='~/Downloads'
+SPCFILE="$DOWNDIR/${SPCURL##*/}"
 SPCPATH=$(echo $PATH | grep -o "${SPCDIR##*/}")
 
+# check platform
+case $(uname -sm) in
+	"Darwin x86_64") target="darwin-amd64" ;;
+	"Darwin arm64") target="darwin-arm64" ;;
+	"Linux x86_64") target="linux-amd64" ;;
+	"Linux aarch64") target="linux-arm64" ;;
+	*) echo "Unsupported platform $(uname -sm). Only avaible for x86_64 and arm64 binaries for Linux and Darwin."; exit 1 ;;
+esac
+
+# version
+version='v2.9.9'
+
 # remove previously installed spicetify (if installed)
+[ -z "$(command -v spicetify)" ] || spicetify restore
 [ -d "$SPCDIR" ] && sudo rm -rf $SPCDIR
 [ -d "$SPCCONF" ] && sudo rm -rf $SPCCONF
 
@@ -91,8 +89,10 @@ sudo chmod a+rwx -R $SPCDIR
 [ -z "$SPCPATH" ] && { 
 	if [ -f ~/.bash_profile ] || [ -f ~/.bash_login ]; then
 		echo 'export PATH="$PATH:$SPCDIR"' >> ~/.bashrc
+		source ~/.bashrc
 	else
 		echo 'export PATH="$PATH:$SPCDIR"' >> ~/.profile
+		source ~/.profile
 	fi
 }
 
