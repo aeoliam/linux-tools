@@ -31,7 +31,11 @@ if [ -z "$(command -v spotify)" ]; then
 fi
 
 # create spotify (linked) shortcut (if not exist)
-{ [ -f "/usr/share/applications/spotify.desktop" ] || sudo ln -s /usr/share/spotify/spotify.desktop /usrshare/applications/; } && { [ -z "$(command -v xfce4-panel)" ] || xfce4-panel -r; }
+if [ ! -f "/usr/share/applications/spotify.desktop" ]; then
+	sudo ln -s /usr/share/spotify/spotify.desktop /usrshare/applications/
+	# refresh xfce panel
+	[ -z "$(command -v xfce4-panel)" ] || xfce4-panel -r
+fi
 
 # set spotify permissions
 sudo chmod a+rw -R /usr/share/spotify
