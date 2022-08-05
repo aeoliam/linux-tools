@@ -1,8 +1,6 @@
 # Linux Tools
 
-Bash script tools for Linux, specifically for Debian/Ubuntu-based Linux distributions.
-
-Make it easier just by running one script than executing commands one-by-one.
+Bash script tools for Linux, specifically for `Debian/Ubuntu`-based Linux distributions.
 
 ## Description & Usage
 
@@ -14,16 +12,16 @@ Make it easier just by running one script than executing commands one-by-one.
   ```
 
 - [installer.sh](/installer.sh)
-<br>Install Linux applications. (Selectable)<br>
+<br>Install Linux applications. _(Selectable)_<br>
 <br>List of applications on this command are basic and my most frequently used applications.<br>
-(Spotify and Spicetify are also included in this script.)<br>
+(**Spotify** and **Spicetify** are included in this script.)<br>
 <br>Usage:
   ```bash
   curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/installer.sh | sh
   ```
 
 - [uninstaller.sh](/uninstaller.sh)
-<br>Uninstall Linux applications. (Selectable)<br>
+<br>Uninstall Linux applications. _(Selectable)_<br>
 <br>List of applications on this command are mostly prebuilt and rarely used applications.<br>
 <br>Usage:
   ```bash
@@ -31,8 +29,8 @@ Make it easier just by running one script than executing commands one-by-one.
   ```
 
 - [spotify.sh](/spotify.sh)
-<br>Install Spotify and Spicetify just by executing this script. Make it ready-to-play, so you don't have to execute any commands manually. Just open Spotify and listen to a song peacefully after executed this script.<br>
-<br>Spicetify v2.9.9 will be used since Spotify for Debian/Ubuntu stuck at v1.1.84.<br>
+<br>Install **Spotify** and **Spicetify** just by running this script. So you don't have to execute any commands manually. Just open Spotify and listen to a song peacefully after executed this script.<br>
+<br>**Spicetify v2.9.9** will be used since **Spotify** for `Debian/Ubuntu` stuck at **v1.1.84.716**.<br>
 <br>Usage:
   ```bash
   curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/spotify.sh | sh
