@@ -14,21 +14,28 @@ command -v unzip >/dev/null || { echo "[unzip] isn't installed!"; sudo apt -y up
 # INSTALL SPOTIFY
 ##################################################
 
+SPOTIFY=$(command -v spotify)
+
 SPDIR='/usr/share/spotify'
 SPCONF="$HOME/.config/spotify" || SPCONF='~/.config/spotify'
 SPPREFS="$SPCONF/prefs"
 
-# check wether spotify is installed or not
-if [ -z "$(command -v spotify)" ]; then
-	# add spotify pubkey to apt
-	curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - 
-	# add spotify repository to apt sources
-	sudo echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.dspotify.list
-	# finally install spotify-client
-	sudo apt -y update && sudo apt -y install 'spotify-client'
+# remove previously installed spotify (avoid spicetify unable to backup spotify)
+if [ -n "$SPOTIFY" ]; then
+	sudo apt -y update && sudo apt-get -y purge --auto-remove 'spotify-client'
+	[ -d "$SPCONF" ] && sudo rm -rf "$SPCONF"
 	# sleep to make sure commands are executed properly
 	sleep 3
 fi
+
+# add spotify pubkey to apt
+curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - 
+# add spotify repository to apt sources
+sudo echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.dspotify.list
+# finally install spotify-client
+sudo apt -y update && sudo apt -y install 'spotify-client'
+# sleep to make sure commands are executed properly
+sleep 3
 
 # create spotify (linked) shortcut (if not exist)
 if [ ! -f "/usr/share/applications/spotify.desktop" ]; then
