@@ -38,7 +38,7 @@ if [ ! -f "/usr/share/applications/spotify.desktop" ]; then
 fi
 
 # set spotify permissions
-sudo chmod a+rw -R /usr/share/spotify
+sudo chmod a+rw -R $SPDIR
 
 # sleep to make sure commands are executed properly
 sleep 3
@@ -46,6 +46,8 @@ sleep 3
 ##################################################
 # INSTALL SPICETIFY
 ##################################################
+
+SPICETIFY=$(command -v spicetify)
 
 SPCDIR="$HOME/.spicetify" || SPCDIR='~/.spicetify'
 SPCCONF="$HOME/.config/spicetify" || SPCCONF='~/.config/spicetify'
@@ -65,41 +67,38 @@ version='v2.9.9'
 DOWNDIR="$HOME/Downloads" || DOWNDIR='~/Downloads'
 SPCURL="https://github.com/spicetify/spicetify-cli/releases/download/$version/spicetify-${version#v}-$target.tar.gz"
 SPCFILE="$DOWNDIR/${SPCURL##*/}"
-SPCPATH=$(echo "$PATH" | grep -o "${SPCDIR##*/}")
 
 # remove previously installed spicetify (if installed)
-[ -z "$(command -v spicetify)" ] || spicetify restore
-[ -d "$SPCDIR" ] && sudo rm -rf $SPCDIR
-[ -d "$SPCCONF" ] && sudo rm -rf $SPCCONF
+[ -z "$SPICETIFY" ] || spicetify restore
+[ -d "$SPCDIR" ] && sudo rm -rf "$SPCDIR"
+[ -d "$SPCCONF" ] && sudo rm -rf "$SPCCONF"
 
 # fetch & download spicetify
-wget --directory-prefix="$DOWNDIR" $SPCURL
+wget --directory-prefix="$DOWNDIR" "$SPCURL"
 
 # sleep to make sure commands are executed properly
 sleep 3
 
 # create spicetify directory
-sudo mkdir -p $SPCDIR
+sudo mkdir -p "$SPCDIR"
 
 # extract spicetify archive, and remove it after extracted
-sudo tar -zxf $SPCFILE -C $SPCDIR && rm -f $SPCFILE
+sudo tar -zxf "$SPCFILE" -C "$SPCDIR" && rm -f "$SPCFILE"
 
 # set spicetify permissions recursively
-sudo chmod a+rwx -R $SPCDIR
+sudo chmod a+rwx -R "$SPCDIR"
 
-# add spicetify directory to $PATH (if not listed)
-[ -z "$SPCPATH" ] && { 
-	if [ -f "~/.bash_profile" ] || [ -f "~/.bash_login" ]; then
-		echo 'export PATH="$PATH:$SPCDIR"' >> ~/.bashrc
-		source ~/.bashrc
-	else
-		echo 'export PATH="$PATH:$SPCDIR"' >> ~/.profile
-		source ~/.profile
-	fi
-}
+# remove & add spicetify to $PATH
+if [ -f "~/.bash_profile" ] || [ -f "~/.bash_login" ]; then
+	grep -v '.spicetify' $HOME/.bashrc > $HOME/.bashrc.tmp && cp -af $HOME/.bashrc.tmp $HOME/.bashrc
+	echo 'export PATH="$PATH:$HOME/.spicetify"' >> $HOME/.bashrc && source $HOME/.bashrc
+else
+	grep -v '.spicetify' $HOME/.profile > $HOME/.profile.tmp && cp -af $HOME/.profile.tmp $HOME/.profile
+	echo 'export PATH="$PATH:$HOME/.spicetify"' >> $HOME/.profile && source $HOME/.profile
+fi
 
 # set executable permissions & run spicetify
-sudo chmod a+x $SPCDIR/spicetify && spicetify
+sudo chmod a+x "$SPCDIR/spicetify" && spicetify
 
 # sleep to make sure commands are executed properly
 sleep 3
