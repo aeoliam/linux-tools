@@ -80,8 +80,8 @@ esac
 
 # check spotify version
 sp_ver=$(spotify --version)
-sp_ver=${sp_version%.*.*}
-sp_ver=${sp_version#*.*.}
+sp_ver=${sp_ver%.*.*}
+sp_ver=${sp_ver#*.*.}
 
 releases_url='https://github.com/spicetify/spicetify-cli/releases'
 
