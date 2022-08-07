@@ -4,21 +4,21 @@
 # SETUP
 ##################################################
 
-# check dependencies
-command -v curl >/dev/null || { echo "[curl] isn't installed!"; sudo apt -y update && sudo apt -y install curl; }
-command -v wget >/dev/null || { echo "[grep] isn't installed!"; sudo apt -y update && sudo apt -y install wget; }
-command -v tar >/dev/null || { echo "[tar] isn't installed!"; sudo apt -y update && sudo apt -y install tar; }
-command -v unzip >/dev/null || { echo "[unzip] isn't installed!"; sudo apt -y update && sudo apt -y install unzip; }
+# setup dependencies
+command -v 'curl' >/dev/null || { echo -e "\n[curl] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'curl'; }
+command -v 'wget' >/dev/null || { echo -e "\n[grep] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'wget'; }
+command -v 'tar' >/dev/null || { echo -e "\n[tar] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'tar'; }
+command -v 'unzip' >/dev/null || { echo -e "\n[unzip] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'unzip'; }
 
 ##################################################
 # INSTALL SPOTIFY
 ##################################################
 
-SPOTIFY=$(command -v spotify)
+SPOTIFY=$(command -v 'spotify')
 
 SPDIR='/usr/share/spotify'
-SPCONF="$HOME/.config/spotify" || SPCONF='~/.config/spotify'
-SPPREFS="$SPCONF/prefs"
+SPCONF="${HOME}/.config/spotify" || SPCONF='~/.config/spotify'
+SPPREFS="${SPCONF}/prefs"
 
 # remove previously installed spotify (avoid spicetify unable to backup spotify)
 if [ -n "$SPOTIFY" ]; then
@@ -41,7 +41,7 @@ sleep 3
 if [ ! -f "/usr/share/applications/spotify.desktop" ]; then
 	sudo ln -s /usr/share/spotify/spotify.desktop /usrshare/applications/
 	# refresh xfce panel
-	[ -z "$(command -v xfce4-panel)" ] || xfce4-panel -r
+	[ -z "$(command -v 'xfce4-panel')" ] || xfce4-panel -r
 fi
 
 # set spotify permissions
@@ -54,10 +54,10 @@ sleep 3
 # INSTALL SPICETIFY
 ##################################################
 
-SPICETIFY=$(command -v spicetify)
+SPICETIFY=$(command -v 'spicetify')
 
-SPCDIR="$HOME/.spicetify" || SPCDIR='~/.spicetify'
-SPCCONF="$HOME/.config/spicetify" || SPCCONF='~/.config/spicetify'
+SPCDIR="${HOME}/.spicetify" || SPCDIR='~/.spicetify'
+SPCCONF="${HOME}/.config/spicetify" || SPCCONF='~/.config/spicetify'
 
 # check platform
 case $(uname -sm) in
@@ -71,9 +71,9 @@ esac
 # version
 version='v2.9.9'
 
-DOWNDIR="$HOME/Downloads" || DOWNDIR='~/Downloads'
-SPCURL="https://github.com/spicetify/spicetify-cli/releases/download/$version/spicetify-${version#v}-$target.tar.gz"
-SPCFILE="$DOWNDIR/${SPCURL##*/}"
+DOWNDIR="${HOME}/Downloads" || DOWNDIR='~/Downloads'
+SPCURL="https://github.com/spicetify/spicetify-cli/releases/download/${version}/spicetify-${version#v}-${target}.tar.gz"
+SPCFILE="${DOWNDIR}/${SPCURL##*/}"
 
 # remove previously installed spicetify (if installed)
 [ -z "$SPICETIFY" ] || spicetify restore
@@ -105,7 +105,7 @@ else
 fi
 
 # set executable permissions & run spicetify
-sudo chmod a+x "$SPCDIR/spicetify" && spicetify
+sudo chmod a+x "${SPCDIR}/spicetify" && spicetify
 
 # sleep to make sure commands are executed properly
 sleep 3
