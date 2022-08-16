@@ -126,6 +126,14 @@ case $PACKAGE in
 esac
 wait
 
+# perform cleanup
+echo -e "Cleaning Up.."
+curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/cleanup.sh | sh &>/dev/null
+wait
+
+# detect whether reboot is required or not
+curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/reboot_required.sh | sh
+
 ##################################################
 # END OF SCRIPT
 ##################################################
