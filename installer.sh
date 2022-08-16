@@ -2,20 +2,6 @@
 # by @aeoliam
 
 ##################################################
-# from cleanup.sh
-##################################################
-
-clean_up() {
-	sudo apt -y update
-	sudo apt -y upgrade
-	sudo apt -y full-upgrade
-	sudo apt-get -y dist-upgrade
-	sudo apt-get -y clean
-	sudo apt-get -y autoclean
-	sudo apt-get -y autoremove
-}
-
-##################################################
 # package functions
 ##################################################
 
@@ -130,7 +116,7 @@ read PACKAGES
 	[ "$PACKAGES" == "4" ] && install_mousepad
 	[ "$PACKAGES" == "5" ] && install_nautilusadmin
 	[ "$PACKAGES" == "f" ] && install_fonts
-} && clean_up
+}
 
 ##################################################
 # end
