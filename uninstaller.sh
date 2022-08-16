@@ -20,39 +20,41 @@ clean_up() {
 ##################################################
 
 unistall_xfce4() {
-	echo -e "This will remove/replace some xfce4 packages and dependencies." && sleep 0.3
+	echo -e "This will remove & replace some xfce4 packages and dependencies." && sleep 0.3
 	echo -e "for more information, see xfce4.txt" && sleep 0.5
 	echo -e "Are you sure? [Y/n]"
 	read XFCE
-	{ [ "$XFCE" == "Y"] || [ "$XFCE" == "y" ] } && { sudo apt -y update
-	sudo apt-get -y purge --auto-remove 'xterm'
-	sudo apt-get -y purge --auto-remove 'xarchiver'
-	sudo apt-get -y purge --auto-remove 'xburn'
-	# theme
-	sudo apt-get -y purge --auto-remove 'elementary-xfce-icon-theme'
-	sudo apt-get -y purge --auto-remove 'tango-icon-theme'
-	sudo apt-get -y purge --auto-remove '*libreoffice*'
-	sudo apt-get -y purge --auto-remove '*thunderbird*'
-	sudo apt-get -y purge --auto-remove 'vim*'
-	sudo apt-get -y purge --auto-remove 'fonts-*'
-	# replace
-	# image viewer
-	sudo apt -y install 'ristretto'
-	# archive manager
-	sudo apt -y install 'engrampa'
-	# media player
-	sudo apt -y install 'vlc'
-	# text editor
-	sudo apt -y install 'mousepad'
-	# Chinese, Japanese and Korean fonts support
-	sudo apt -y install 'fonts-noto-cjk'
-	# emoji fonts support
-	sudo apt -y install 'fonts-noto-color-emoji'
-	}
+	{ [ "$XFCE" == "Y"] || [ "$XFCE" == "y" ] } && {
+		sudo apt -y update
+		sudo apt-get -y purge --auto-remove 'xterm'
+		sudo apt-get -y purge --auto-remove 'xarchiver'
+		sudo apt-get -y purge --auto-remove 'xburn'
+		sudo apt-get -y purge --auto-remove 'elementary-xfce-icon-theme'
+		sudo apt-get -y purge --auto-remove 'tango-icon-theme'
+		sudo apt-get -y purge --auto-remove 'fonts-*'
+		sudo apt-get -y purge --auto-remove '*libreoffice*'
+		sudo apt-get -y purge --auto-remove '*thunderbird*'
+		sudo apt-get -y purge --auto-remove 'vim*'; sudo apt-get -y purge --auto-remove 'xxd'
+		# bluetooth
+		sudo apt -y install 'bluetooth'
+		sudo apt -y install 'blueman'
+		# image viewer
+		sudo apt -y install 'ristretto'
+		# archive manager
+		sudo apt -y install 'engrampa'
+		# media player
+		sudo apt -y install 'vlc'
+		# text editor
+		sudo apt -y install 'mousepad'
+		# compatibility fonts
+		sudo apt -y install 'fonts-noto-*'
+		# fira code fonts
+		sudo apt -y install 'fonts-firacode'
+	} || return 1
 }
 
 uninstall_vim() {
-	sudo apt -y update && sudo apt-get -y purge --auto-remove 'vim*'
+	sudo apt -y update && { sudo apt-get -y purge --auto-remove 'vim*'; sudo apt-get -y purge --auto-remove 'xxd'; }
 }
 
 uninstall_firefox() {
