@@ -2,20 +2,6 @@
 # by @aeoliam
 
 ##################################################
-# from cleanup.sh
-##################################################
-
-clean_up() {
-	sudo apt -y update
-	sudo apt -y upgrade
-	sudo apt -y full-upgrade
-	sudo apt-get -y dist-upgrade
-	sudo apt-get -y clean
-	sudo apt-get -y autoclean
-	sudo apt-get -y autoremove
-}
-
-##################################################
 # packgage functions
 ##################################################
 
@@ -52,11 +38,9 @@ unistall_xfce4() {
 		sudo apt -y install 'fonts-firacode'
 	} || return 1
 }
-
 uninstall_vim() {
 	sudo apt -y update && { sudo apt-get -y purge --auto-remove 'vim*'; sudo apt-get -y purge --auto-remove 'xxd'; }
 }
-
 uninstall_firefox() {
 	sudo apt -y update && sudo apt-get -y purge --auto-remove '*firefox*'
 	sudo snap remove 'firefox' && sudo rm -rf /root/snap/firefox
@@ -108,7 +92,8 @@ read PACKAGES
 	[ "$PACKAGES" == "4" ] && uninstall_xterm
 	[ "$PACKAGES" == "x" ] && uninstall_xfce4
 	[ "$PACKAGES" == "a" ] && uninstall_all
-} & clean_up
+	wait
+}
 
 ##################################################
 # end
