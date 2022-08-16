@@ -5,10 +5,10 @@
 ##################################################
 
 # setup dependencies
-command -v 'curl' >/dev/null || { echo -e "\n[curl] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'curl'; }
-command -v 'wget' >/dev/null || { echo -e "\n[grep] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'wget'; }
-command -v 'tar' >/dev/null || { echo -e "\n[tar] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'tar'; }
-command -v 'unzip' >/dev/null || { echo -e "\n[unzip] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'unzip'; }
+command -v 'curl' >/dev/null || { printf "\n[curl] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'curl'; }
+command -v 'wget' >/dev/null || { printf "\n[grep] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'wget'; }
+command -v 'tar' >/dev/null || { printf "\n[tar] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'tar'; }
+command -v 'unzip' >/dev/null || { printf "\n[unzip] isn't installed!\n"; sudo apt -y update && sudo apt -y install 'unzip'; }
 
 ##################################################
 # INSTALL SPOTIFY
@@ -137,8 +137,8 @@ esac
 
 shell_rc="${HOME}/${shell_rc}"
 grep -v "${spc_dir##*/}" "$shell_rc" > ${shell_rc}.tmp && mv -f "${shell_rc}.tmp" "$shell_rc"
-echo -e "\nexport PATH="\$PATH:${spc_dir}"" >> $shell_rc && { source "$shell_rc" || . "$shell_rc"; }
-echo -e "\nexport SPICETIFY_INSTALL="${spc_dir}"" >> $shell_rc && { source "$shell_rc" || . "$shell_rc"; }
+printf "\nexport PATH="\$PATH:${spc_dir}"" >> $shell_rc && { source "$shell_rc" 2>/dev/null || . "$shell_rc" 2>/dev/null; }
+#printf "\nexport SPICETIFY_INSTALL="${spc_dir}"" >> $shell_rc && { source "$shell_rc" 2>/dev/null || . "$shell_rc" 2>/dev/null; }
 
 # set executable permissions
 chmod a+x "$spc_exe"
