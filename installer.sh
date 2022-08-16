@@ -5,44 +5,28 @@
 # FUNCTIONS
 ##################################################
 
-install_extra() {
-	echo -e "\nDo you also want to install ${1}? [Y/n]"
-	read EXTRA
-	{ [ "$EXTRA" == "y" ] || [ "$EXTRA" == "Y" ] } && { sudo apt -y install "$1"; } || return 1
-}
-install_codecs() {
-	sudo add-apt-repository multiverse
+apt_install() {
 	sudo apt -y update
-	sudo apt -y install 'ubuntu-restricted-extras'
-	install_extra 'vlc' && install_extra 'vlc-plugin-*'
-}
-install_spotify() { curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/spotify.sh | sh; }
+	sudo apt -y install "$1" || sudo dpkg -i "$1"
+	[ -z "$2" ] && apt_install_extra "$2"
+	[ -z "$3" ] && apt_install_extra "$3"
+	wait; }
+apt_install_extra() {
+	echo -e "\nDo you also want to install ${1}? [Y/n]"
+	read PACKAGE_EXTRA
+	if [ "$PACKAGE_EXTRA" == "Y" ] || [ "$PACKAGE_EXTRA" == "y" ]; then sudo apt -y install "$1"; done; }
 install_chrome() {
 	local DOWNDIR="${HOME}/Downloads"
 	local DEBURL='https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
 	local DEBFILE="${DOWNDIR}/${DEBURL##*/}"
 	[ -f "$DEBFILE" ] || wget --directory-prefix="$DOWNDIR" "$DEBURL" && wait
-	sudo apt -y update && { sudo apt -y install . "${DOWNDIR}/${DEBFILE}" || sudo dpkg -i "${DOWNDIR}/${DEBFILE}"; } || return 1
-	[ -f "$DOWNDIR/$DEBFILE" ] && rm -f $DOWNDIR/$DEBFILE
-}
-install_vbox() {
-	sudo apt -y update && {
-		sudo apt -y install 'dkms'
-		sudo apt -y install 'virtualbox'
-		sudo apt -y install 'virtualbox-ext-pack'
-	} || return 1
-}
-install_mousepad() {
-	sudo apt -y update && { sudo apt -y install 'mousepad'; } || return 1
-}
-install_nautilusadmin() {
-	sudo apt -y update && { sudo apt -y install 'nautilus-admin'; } || return 1
-}
+	apt_install "$DEBFILE"
+	rm -f "$DEBFILE"; }
 install_fonts() {
 	echo -e "────────────────────────────────────────" && sleep 0.5
 	echo -e "Fonts list:"
 	local FONTSLIST="
-	[1]:Noto(Selection)
+	[1]:Noto(Selectable)
 	[2]:FiraCode
 	[3]:Lato
 	[4]:IBM-Plex
@@ -54,12 +38,11 @@ install_fonts() {
 	case $FONT in
 		1) install_fonts_noto ;;
 		2) install_fonts_firacode ;;
-		3) install_fonts_lato ;;
-		4) install_fonts_ibmplex ;;
+		3) apt_install 'fonts-lato' ;;
+		4) apt_install 'fonts-ibm-plex' ;;
 		c) exit 0 ;;
 		*) echo -e 'Please input one of the options above!'; exit 1 ;;
-	esac
-}
+	esac; }
 install_fonts_noto() {
 	echo -e "────────────────────────────────────────" && sleep 0.5
 	echo -e "Noto's Fonts list:"
@@ -77,30 +60,24 @@ install_fonts_noto() {
 	echo -e "Which Noto's Fonts you wish to install?"
 	read NOTO
 	case $NOTO in
-		0) sudo apt -y update && sudo apt -y install 'fonts-noto*' ;;
-		1) sudo apt -y update && sudo apt -y install 'fonts-noto-core' && install_extra "fonts-noto-extra" ;;
-		2) sudo apt -y update && sudo apt -y install 'fonts-noto-ui-core' && install_extra "fonts-noto-ui-extra" ;;
-		3) sudo apt -y update && sudo apt -y install 'fonts-noto-hinted' 'fonts-noto-unhinted' ;;
-		4) sudo apt -y update && sudo apt -y install 'fonts-noto-mono' ;;
-		5) sudo apt -y update && sudo apt -y install 'fonts-noto-color-emoji' ;;
-		6) sudo apt -y update && sudo apt -y install 'fonts-noto-cjk' && install_extra "fonts-noto-cjk-extra" ;;
+		0) apt_install 'fonts-noto*' ;;
+		1) apt_install 'fonts-noto-core' 'fonts-noto-extra' ;;
+		2) apt_install 'fonts-noto-ui-core' 'fonts-noto-ui-extra' ;;
+		3) apt_install 'fonts-noto-hinted' 'fonts-noto-unhinted' ;;
+		4) apt_install 'fonts-noto-mono' ;;
+		5) apt_install 'fonts-noto-color-emoji' ;;
+		6) apt_install 'fonts-noto-cjk' 'fonts-noto-cjk-extra' ;;
 		c) exit 0 ;;
 		*) echo -e 'Please input one of the options above!'; exit 1 ;;
-	esac
-}
-install_fonts_lato() {
-	sudo apt -y update && { sudo apt -y install 'fonts-lato'; }
-}
+	esac; }
 install_fonts_firacode() {
+	curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/functions/prop.sh | sh
+	local OS_ID=$(read_prop 'ID' '/etc/os-release')
 	case $OS_ID in
-		"ubuntu") sudo add-apt-repository -y universe ;;
-		"debian") sudo add-apt-repository -y contrib ;;
+		'ubuntu') sudo add-apt-repository -y universe ;;
+		'debian') sudo add-apt-repository -y contrib ;;
 	esac
-	sudo apt -y update && sudo apt -y install fonts-firacode
-}
-install_fonts_ibmplex() {
-	sudo apt -y update && { sudo apt -y install 'fonts-ibm-plex'; }
-}
+	apt_install 'fonts-firacode'; }
 
 ##################################################
 # CLI
@@ -114,23 +91,27 @@ wait
 echo -e "────────────────────────────────────────" && sleep 0.5
 echo -e "Package list:"
 PKGLIST="
-[1]:MultimediaCodecs(Ubuntu)
+[1]:Chrome
 [2]:Spotify+Spicetify
-[3]:Chrome
-[4]:Mousepad
-[5]:Nautilus-Admin
-[f]:Fonts(Selection)
+[3]:VLC
+[4]:Codecs(Ubuntu)
+[5]:Mousepad
+[6]:Nautilus-Admin
+[7]:VirtualBox
+[f]:Fonts(Selectable)
 [c]:Cancel
 "
 for PKG in $PKGLIST; do echo -e "$PKG" && sleep 0.3; done
 echo -e "Which package's you wish to install?"
 read PACKAGE
 case $PACKAGE in
-	1) install_codecs ;;
-	2) install_spotify ;;
-	3) install_chrome ;;
-	4) install_mousepad ;;
-	5) install_nautilusadmin ;;
+	1) install_chrome ;;
+	2) curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/spotify.sh | sh ;;
+	3) apt_install 'vlc' 'vlc-plugin-*' ;;
+	4) sudo add-apt-repository multiverse && apt_install 'ubuntu-restricted-extras' ;;
+	5) apt_install 'mousepad' ;;
+	6) apt_install 'nautilus-admin' ;;
+	7) apt_install 'dkms' 'virtualbox' 'virtualbox-ext-pack' ;;
 	f) install_fonts ;;
 	c) exit 0 ;;
 	*) echo -e 'Please input one of the options above!'; exit 1 ;;
