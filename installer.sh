@@ -22,7 +22,11 @@ clean_up() {
 install_extra() {
 	echo -e "\nDo you also want to install $1? [Y/n]"
 	read EXTRA
-	{ [ "$EXTRA" == "y" ] || [ "$EXTRA" == "Y" ]; } && sudo apt -y install "$1"
+	if [ "$EXTRA" == "y" ] || [ "$EXTRA" == "Y" ]; then
+		sudo apt -y install "$1"
+	else
+		return 1
+	fi
 }
 install_codecs() {
 	sudo add-apt-repository multiverse
