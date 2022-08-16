@@ -10,7 +10,7 @@ unistall_xfce4() {
 	echo -e "for more information, see xfce4.txt" && sleep 0.5
 	echo -e "Are you sure? [Y/n]"
 	read XFCE
-	{ [ "$XFCE" == "Y"] || [ "$XFCE" == "y" ] } && {
+	{ [ "$XFCE" == "Y"] || [ "$XFCE" == "y" ]; } && {
 		sudo apt -y update
 		sudo apt-get -y purge --auto-remove 'xterm'
 		sudo apt-get -y purge --auto-remove 'xarchiver'
@@ -38,33 +38,30 @@ unistall_xfce4() {
 		sudo apt -y install 'fonts-firacode'
 	} || return 1
 }
-uninstall_vim() {
-	sudo apt -y update && { sudo apt-get -y purge --auto-remove 'vim*'; sudo apt-get -y purge --auto-remove 'xxd'; }
-}
 uninstall_firefox() {
-	sudo apt -y update && sudo apt-get -y purge --auto-remove '*firefox*'
+	sudo apt -y update && { sudo apt-get -y purge --auto-remove '*firefox*'; } || return 1
 	sudo snap remove 'firefox' && sudo rm -rf /root/snap/firefox
 }
-uninstall_libreoffice() {
-	sudo apt -y update && sudo apt-get -y purge --auto-remove '*libreoffice*'
-}
 uninstall_thunderbird() {
-	sudo apt -y update && sudo apt-get -y purge --auto-remove '*thunderbird*'
+	sudo apt -y update && { sudo apt-get -y purge --auto-remove '*thunderbird*'; } || return 1
+}
+uninstall_libreoffice() {
+	sudo apt -y update && { sudo apt-get -y purge --auto-remove '*libreoffice*'; } || return 1
+}
+uninstall_vim() {
+	sudo apt -y update && { sudo apt-get -y purge --auto-remove 'vim*'; sudo apt-get -y purge --auto-remove 'xxd'; } || return 1
 }
 uninstall_chrome() {
-	sudo apt -y update && sudo apt-get -y purge --auto-remove 'google-chrome-*'
-}
-uninstall_xterm() {
-	sudo apt -y update && sudo apt-get -y purge --auto-remove 'xterm'
+	sudo apt -y update && { sudo apt-get -y purge --auto-remove 'google-chrome-*'; } || return 1
 }
 uninstall_fonts() {
-	sudo apt -y update && sudo apt-get -y purge --auto-remove 'fonts-*'
+	sudo apt -y update && { sudo apt-get -y purge --auto-remove 'fonts-*'; } || return 1
 }
 uninstall_all() {
 	uninstall_firefox
-	uninstall_libreoffice
 	uninstall_thunderbird
-	uninstall_xterm
+	uninstall_libreoffice
+	uninstall_chrome
 }
 
 ##################################################
@@ -75,8 +72,10 @@ echo -e "───────────────────────�
 echo -e "Package list:"
 PKGLIST="
 [1]:Firefox
-[2]:LibreOffice
-[3]:Thunderbird
+[2]:Thunderbird
+[3]:LibreOffice
+[4]:Vim
+[5]:Chrome
 [a]:AllPackagesAbove
 [x]:xfce4
 [f]:Fonts
@@ -87,10 +86,11 @@ echo -e "Which package's you wish to uninstall?"
 read PACKAGES
 {
 	[ "$PACKAGES" == "1" ] && uninstall_firefox
-	[ "$PACKAGES" == "2" ] && uninstall_libreoffice
-	[ "$PACKAGES" == "3" ] && uninstall_thunderbird
-	[ "$PACKAGES" == "4" ] && uninstall_xterm
+	[ "$PACKAGES" == "2" ] && uninstall_thunderbird
+	[ "$PACKAGES" == "3" ] && uninstall_libreoffice
+	[ "$PACKAGES" == "4" ] && uninstall_chrome
 	[ "$PACKAGES" == "a" ] && uninstall_all
+	[ "$PACKAGES" == "f" ] && uninstall_fonts
 	[ "$PACKAGES" == "x" ] && uninstall_xfce4
 	wait
 }
