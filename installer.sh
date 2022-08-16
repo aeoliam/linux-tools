@@ -16,7 +16,7 @@ install_codecs() {
 	sudo apt -y install 'ubuntu-restricted-extras'
 	install_extra 'vlc' && install_extra 'vlc-plugin-*'
 }
-#install_spotify() {;}
+install_spotify() { curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/spotify.sh | sh; }
 install_chrome() {
 	local DOWNDIR="${HOME}/Downloads"
 	local DEBURL='https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
@@ -106,6 +106,11 @@ install_fonts_ibmplex() {
 # CLI
 ##################################################
 
+# perform cleanup
+echo -e "Updating databases.."
+curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/cleanup.sh | sh &>/dev/null
+wait
+
 echo -e "────────────────────────────────────────" && sleep 0.5
 echo -e "Package list:"
 PKGLIST="
@@ -131,6 +136,9 @@ case $PACKAGE in
 	*) echo -e 'Please input one of the options above!'; exit 1 ;;
 esac
 wait
+
+# detect whether reboot is required or not
+curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/reboot_required.sh | sh
 
 ##################################################
 # END OF SCRIPT
