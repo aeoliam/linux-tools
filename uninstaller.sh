@@ -79,19 +79,19 @@ PKGLIST="
 [3]:Thunderbird
 [a]:AllPackagesAbove
 [x]:xfce4
-[f]:AllFonts
+[f]:Fonts
 [c]:Cancel
 "
 for PKG in $PKGLIST; do echo -e "$PKG" && sleep 0.3; done
-echo -e "Which package's you wish to install?"
+echo -e "Which package's you wish to uninstall?"
 read PACKAGES
 {
 	[ "$PACKAGES" == "1" ] && uninstall_firefox
 	[ "$PACKAGES" == "2" ] && uninstall_libreoffice
 	[ "$PACKAGES" == "3" ] && uninstall_thunderbird
 	[ "$PACKAGES" == "4" ] && uninstall_xterm
-	[ "$PACKAGES" == "x" ] && uninstall_xfce4
 	[ "$PACKAGES" == "a" ] && uninstall_all
+	[ "$PACKAGES" == "x" ] && uninstall_xfce4
 	wait
 }
 
