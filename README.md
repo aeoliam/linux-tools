@@ -62,8 +62,6 @@ Bash script tools for Linux, specifically for `Debian/Ubuntu` based Linux distri
 - [shutdown_timer.sh](/shutdown_timer.sh)
   <br>Automatically shutdown your computer on specific times.
   <br>
-  <br>* _Only work on **xfce** Desktop Environment._
-  <br>
   <br>Usage:
   ```bash
   curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/shutdown_timer.sh | sh
