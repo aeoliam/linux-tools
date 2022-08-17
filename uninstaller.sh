@@ -5,6 +5,12 @@
 # FUNCTIONS
 ##################################################
 
+apt_install() {
+	sudo apt -y update
+	sudo apt-get -y purge --auto-remove "$1"
+	[ -z "$2" ] && sudo apt-get -y purge --auto-remove "$2"
+	[ -z "$3" ] && sudo apt-get -y purge --auto-remove "$3"
+	wait; }
 uninstall_firefox() {
 	sudo apt -y update && { sudo apt-get -y purge --auto-remove '*firefox*'; } || return 1
 	sudo snap remove 'firefox' && sudo rm -rf /root/snap/firefox
