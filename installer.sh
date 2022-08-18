@@ -14,7 +14,7 @@ apt_install() {
 apt_install_extra() {
 	echo -e "\nDo you also want to install ${1}? [Y/n]"
 	read PACKAGE_EXTRA
-	if [ "$PACKAGE_EXTRA" == "Y" ] || [ "$PACKAGE_EXTRA" == "y" ]; then sudo apt -y install "$1"; done; }
+	if [ "$PACKAGE_EXTRA" == "Y" ] || [ "$PACKAGE_EXTRA" == "y" ]; then sudo apt -y install "$1"; fi; }
 install_chrome() {
 	local DOWNDIR="${HOME}/Downloads"
 	local DEBURL='https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
