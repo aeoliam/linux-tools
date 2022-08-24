@@ -4,7 +4,7 @@
 ##################################################
 # FUNCTIONS
 ##################################################
-
+ui_print() { printf "${1}\n"; }
 apt_install() {
 	sudo apt -y update
 	sudo apt -y install "$1" || sudo dpkg -i "$1"
@@ -12,7 +12,7 @@ apt_install() {
 	[ -z "$3" ] && apt_install_extra "$3"
 	wait; }
 apt_install_extra() {
-	echo -e "\nDo you also want to install ${1}? [Y/n]"
+	ui_print "\nDo you also want to install ${1}? [Y/n]"
 	read PACKAGE_EXTRA
 	if [ "$PACKAGE_EXTRA" == "Y" ] || [ "$PACKAGE_EXTRA" == "y" ]; then sudo apt -y install "$1"; fi; }
 install_chrome() {
@@ -23,8 +23,8 @@ install_chrome() {
 	apt_install "$DEBFILE"
 	rm -f "$DEBFILE"; }
 install_fonts() {
-	echo -e "────────────────────────────────────────" && sleep 0.5
-	echo -e "Fonts list:"
+	ui_print "────────────────────────────────────────" && sleep 0.5
+	ui_print "Fonts list:"
 	local FONTSLIST="
 	[1]:Noto(Selectable)
 	[2]:FiraCode
@@ -32,8 +32,8 @@ install_fonts() {
 	[4]:IBM-Plex
 	[c]:Cancel
 	"
-	for FONTS in $FONTSLIST; do echo -e "$FONTS" && sleep 0.3; done
-	echo -e "Which fonts you wish to install?"
+	for FONTS in $FONTSLIST; do ui_print "$FONTS" && sleep 0.3; done
+	ui_print "Which fonts you wish to install?"
 	read FONT
 	case $FONT in
 		1) install_fonts_noto ;;
@@ -41,11 +41,11 @@ install_fonts() {
 		3) apt_install 'fonts-lato' ;;
 		4) apt_install 'fonts-ibm-plex' ;;
 		c) exit 0 ;;
-		*) echo -e 'Please input one of the options above!'; exit 1 ;;
+		*) ui_print 'Please input one of the options above!'; exit 1 ;;
 	esac; }
 install_fonts_noto() {
-	echo -e "────────────────────────────────────────" && sleep 0.5
-	echo -e "Noto's Fonts list:"
+	ui_print "────────────────────────────────────────" && sleep 0.5
+	ui_print "Noto's Fonts list:"
 	local NOTOLIST="
 	[0]:Full(Recommended)
 	[1]:NotoCore
@@ -56,8 +56,8 @@ install_fonts_noto() {
 	[6]:NotoChineseJapaneseKorean
 	[c]:Cancel
 	"
-	for NOTOFONTS in $NOTOLIST; do echo -e "$NOTOFONTS" && sleep 0.3; done
-	echo -e "Which Noto's Fonts you wish to install?"
+	for NOTOFONTS in $NOTOLIST; do ui_print "$NOTOFONTS" && sleep 0.3; done
+	ui_print "Which Noto's Fonts you wish to install?"
 	read NOTO
 	case $NOTO in
 		0) apt_install 'fonts-noto*' ;;
@@ -68,7 +68,7 @@ install_fonts_noto() {
 		5) apt_install 'fonts-noto-color-emoji' ;;
 		6) apt_install 'fonts-noto-cjk' 'fonts-noto-cjk-extra' ;;
 		c) exit 0 ;;
-		*) echo -e 'Please input one of the options above!'; exit 1 ;;
+		*) ui_print 'Please input one of the options above!'; exit 1 ;;
 	esac; }
 install_fonts_firacode() {
 	curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/functions/prop.sh | sh
@@ -84,12 +84,12 @@ install_fonts_firacode() {
 ##################################################
 
 # perform cleanup
-echo -e "Updating databases.."
-curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/cleanup.sh | sh &>/dev/null
+ui_print "Updating databases.."
+curl -fsSL https://raw.githubusercontent.com/aeoliam/linux-tools/master/cleanup.sh &>/dev/null | sh
 wait
 
-echo -e "────────────────────────────────────────" && sleep 0.5
-echo -e "Package list:"
+ui_print "────────────────────────────────────────" && sleep 0.5
+ui_print "Package list:"
 PKGLIST="
 [1]:Chrome
 [2]:Spotify+Spicetify
@@ -101,8 +101,8 @@ PKGLIST="
 [f]:Fonts(Selectable)
 [c]:Cancel
 "
-for PKG in $PKGLIST; do echo -e "$PKG" && sleep 0.3; done
-echo -e "Which package's you wish to install?"
+for PKG in $PKGLIST; do ui_print "$PKG" && sleep 0.3; done
+ui_print "Which package's you wish to install?"
 read PACKAGE
 case $PACKAGE in
 	1) install_chrome ;;
@@ -114,7 +114,7 @@ case $PACKAGE in
 	7) apt_install 'dkms' 'virtualbox' 'virtualbox-ext-pack' ;;
 	f) install_fonts ;;
 	c) exit 0 ;;
-	*) echo -e 'Please input one of the options above!'; exit 1 ;;
+	*) ui_print 'Please input one of the options above!'; exit 1 ;;
 esac
 wait
 
